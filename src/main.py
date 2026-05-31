@@ -66,3 +66,13 @@ else:
                     f.write(req_css.text)
                     print(css_fn) #type:ignore
             print("Done fetching CSS...")
+    
+    #       Get all HTML
+    if not req.text:
+        print("No HTML files found! ):")
+    else:
+        os.makedirs("lemon-cloner_output/HTML", exist_ok=True)
+
+        with open("lemon-cloner_output/HTML/index.html", 'w') as f:
+            f.write(req.text)
+    print("Saved HTML file locally.")
