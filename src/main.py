@@ -1,6 +1,8 @@
 import urllib.parse
 from multiprocessing.dummy import Pool
 import requests, bs4, argparse, os, urllib
+import time
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", "-i", help="The website to clone.", required=True)
@@ -18,8 +20,10 @@ with open(f"{path}/hi.md", 'w') as hi:
 if not args.input.startswith("https://") and not args.input.startswith("http://"):
     args.input = "https://" + f"{args.input}"
 req = requests.get(args.input)
-if req.status_code != 200:
+time.sleep(0.1)
+if req.status_code >= 400:
     print("Something went wrong with the request;", req.text)
+    sys.exit()
 
 else:
 
@@ -37,6 +41,7 @@ else:
 
                 end_url = urllib.parse.urljoin(args.input, src) #type:ignore
                 req_img = requests.get(end_url)
+                time.sleep(0.1)
                 fn = os.path.basename(end_url)
                 f_path = os.path.join("lemon-cloner_output/", "images/", fn)
                 with open(f"{f_path}", "wb") as f:
@@ -60,6 +65,7 @@ else:
                 css_end_url = urllib.parse.urljoin(args.input, css_src).split("?")[0]
                 css_fn = os.path.basename(css_end_url)
                 req_css = requests.get(css_end_url)
+                time.sleep(0.1)
 
                 css_f_path = os.path.join("lemon-cloner_output/", "CSS/", css_fn)
                 with open(css_f_path, 'w', encoding='utf-8') as f:
@@ -72,7 +78,7 @@ else:
         print("No HTML files found! ):")
     else:
         os.makedirs("lemon-cloner_output/HTML", exist_ok=True)
-
-        with open("lemon-cloner_output/HTML/index.html", 'w') as f:
-            f.write(req.text)
+        txt=soup.prettify()
+        with open("lemon-cloner_output/HTML/index.html", 'w', encoding='utf-8') as f:
+            f.write(txt)
     print("Saved HTML file locally.")
