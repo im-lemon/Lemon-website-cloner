@@ -1,5 +1,3 @@
-from encodings.punycode import T
-from fnmatch import fnmatch
 import urllib.parse
 from multiprocessing.dummy import Pool
 import requests, bs4, argparse, os, urllib
