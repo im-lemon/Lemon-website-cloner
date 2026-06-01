@@ -14,7 +14,7 @@ with open(f"{path}/hi.md", 'w') as hi:
     hi = hi.write("Hello, this file is here as a placeholder. " \
     "If there are no contents in the output directory except this file, there might not be any CSS/Images on/in the site you want to scrape. " \
     "It could also be caused by an internal error in the cloner, "
-    "if so, please open an issue on our Github repository [here](https://github.com/im-lemon/lemon-website-cloner)")
+    "if so, please open an issue on our Github repository [here.](https://github.com/im-lemon/lemon-website-cloner)")
 
 
 if not args.input.startswith("https://") and not args.input.startswith("http://"):
@@ -39,9 +39,9 @@ else:
             for image in pool.imap_unordered(lambda i: i, imgs):
                 src = image["src"]
 
-                end_url = urllib.parse.urljoin(args.input, src) #type:ignore
-                req_img = requests.get(end_url)
+                end_url = urllib.parse.urljoin(args.input, src).split("?")[0]
                 time.sleep(0.1)
+                req_img = requests.get(end_url)
                 fn = os.path.basename(end_url)
                 f_path = os.path.join("lemon-cloner_output/", "images/", fn)
                 with open(f"{f_path}", "wb") as f:
@@ -58,7 +58,7 @@ else:
         print("No CSS Files found! ):")
     else:
         os.makedirs("lemon-cloner_output/CSS", exist_ok=True)
-        with Pool(20) as pool:
+        with Pool(100) as pool:
             for css_file in pool.imap_unordered(lambda i: i, css_files):
                 css_src = css_file["href"]
 
