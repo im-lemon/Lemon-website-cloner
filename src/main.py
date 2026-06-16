@@ -35,7 +35,7 @@ else:
     if not imgs:
         print("No images found! ):")
     else:
-        os.makedirs("lemon-cloner_output/images", exist_ok=True)
+        os.makedirs("lemon-cloner_output/Images", exist_ok=True)
         with Pool(100) as pool:
             for image in pool.imap_unordered(lambda i: i, imgs):
                 src = image["src"]
@@ -62,7 +62,7 @@ else:
         os.makedirs("lemon-cloner_output/CSS", exist_ok=True)
         with Pool(100) as pool:
             for css_file in pool.imap_unordered(lambda i: i, css_files):
-                css_src = css_file["href"]
+                css_src = css_file.get("href")
 
                 css_end_url = urllib.parse.urljoin(args.input, css_src).split("?")[0]
                 css_fn = os.path.basename(css_end_url)
@@ -98,7 +98,9 @@ else:
         print("Cleaned Image...")
 
     for cssrc in css_files:
-        cssog = cssrc["href"]
+        cssog = cssrc.get("href")
+        if not cssog:
+            continue
 
         this_css_fn = os.path.basename(cssog) #type:ignore
 
@@ -109,7 +111,7 @@ else:
             clean = this_css_fn
         cssrc["href"] = f"../CSS/{clean}"
 
-        txt=soup.prettify()
-        with open("lemon-cloner_output/HTML/index.html", 'w', encoding='utf-8') as f:
-            f.write(txt)
+    txt=soup.prettify()
+    with open("lemon-cloner_output/HTML/index.html", 'w', encoding='utf-8') as f:
+        f.write(txt)
     print("Saved HTML file locally.")
