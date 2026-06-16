@@ -1,0 +1,1 @@
+Hello, this file is here as a placeholder. If there are no contents in the output directory except this file, there might not be any CSS/Images on/in the site you want to scrape. It could also be caused by an internal error in the cloner, if so, please open an issue on our Github repository [here.](https://github.com/im-lemon/lemon-website-cloner)
