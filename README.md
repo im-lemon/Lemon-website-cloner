@@ -11,4 +11,4 @@ That's right; you do not need to enter in "https://www." or "http://www.", the s
 
 # EXAMPLES
 
-Want to see some Examples? check the `Examples/`folder!
+Want to see some Examples? check the `Examples/` folder!
