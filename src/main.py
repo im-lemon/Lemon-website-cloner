@@ -29,6 +29,7 @@ else:
 
 #   Get all images from site.
     
+    
     soup = bs4.BeautifulSoup(req.text, "html.parser")
     imgs = soup.find_all("img")
     if not imgs:
@@ -43,6 +44,8 @@ else:
                 time.sleep(0.1)
                 req_img = requests.get(end_url)
                 fn = os.path.basename(end_url)
+                fn = fn.replace(" ", "_")
+                fn = fn.replace("+", "_")
                 f_path = os.path.join("lemon-cloner_output/", "images/", fn)
                 with open(f"{f_path}", "wb") as f:
                     f.write(req_img.content)
@@ -51,8 +54,7 @@ else:
 
     
     # Get ALL CSS from site.
-    
-    soup = bs4.BeautifulSoup(req.text, "html.parser")
+
     css_files = soup.find_all("link", rel="stylesheet")
     if not css_files:
         print("No CSS Files found! ):")
@@ -73,11 +75,40 @@ else:
                     print(css_fn) #type:ignore
             print("Done fetching CSS...")
     
-    #       Get all HTML
+#   Get all HTML
     if not req.text:
         print("No HTML files found! ):")
     else:
         os.makedirs("lemon-cloner_output/HTML", exist_ok=True)
+
+    # rewrite all paths to point to our fetched files.
+
+    for img in imgs:
+        imgog = img["src"]
+        this_img_fn = os.path.basename(imgog) #type:ignore
+        if "?" in this_img_fn:
+            c = this_img_fn.find("?")
+            clean = this_img_fn[:c]
+        else:
+            clean = this_img_fn
+        clean = urllib.parse.unquote(clean)
+        clean = clean.replace(" ", "_")
+        clean = clean.replace("+", "_")
+        img["src"] = f"../Images/{clean}"
+        print("Cleaned Image...")
+
+    for cssrc in css_files:
+        cssog = cssrc["href"]
+
+        this_css_fn = os.path.basename(cssog) #type:ignore
+
+        if "?" in this_css_fn:
+            c = this_css_fn.find("?")
+            clean = this_css_fn[:c]
+        else:
+            clean = this_css_fn
+        cssrc["href"] = f"../CSS/{clean}"
+
         txt=soup.prettify()
         with open("lemon-cloner_output/HTML/index.html", 'w', encoding='utf-8') as f:
             f.write(txt)
